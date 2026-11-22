@@ -1,0 +1,93 @@
+/* ---------- round transport buttons (thin circles) ---------- */
+.round {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  color: var(--text);
+  transition: color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+}
+.round:hover { color: var(--accent-text); }
+.round:active { transform: scale(.92); }
+.round.is-active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.round-sm { width: 40px; height: 40px; }
+.round-sm svg { width: 19px; height: 19px; }
+.round-md { width: 48px; height: 48px; }
+.round-md svg { width: 22px; height: 22px; }
+.round-lg { width: 68px; height: 68px; }
+.round-lg svg { width: 30px; height: 30px; }
+
+/* ---------- back button: the iconic bold arrow in a thin circle, tucked into the top-left corner ---------- */
+.back-corner {
+  --size: 48px;
+  --inset: 12px;
+  position: absolute;
+  top: var(--inset);
+  left: var(--inset);
+  z-index: 5;
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+  border: 3px solid var(--back-ring); /* grey ring, white arrow */
+  border-radius: 50%;
+  background: var(--bar-bg);
+  color: var(--text);
+  transition: color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+}
+.back-corner svg { width: 26px; height: 26px; }
+.back-corner:hover { border-color: var(--text); }
+.back-corner:active { transform: scale(.94); }
+.back-corner:focus-visible { outline-offset: -6px; }
+/* Space the first line of a page so it clears the corner button. */
+.clear-back { margin-left: max(0px, calc(12px + 48px + var(--s2) - var(--gutter))); }
+
+/* Playing window only: a bigger ring cut off by the top edge of the window, arrow in the middle. */
+.back-corner.back-now {
+  --size: 60px;
+  top: -12px;
+  left: 16px;
+  background: transparent;
+}
+.back-corner.back-now svg { width: 26px; height: 26px; }
+.back-corner.back-now:focus-visible { outline-offset: -10px; }
+.now .clear-back { margin-left: max(0px, calc(16px + 60px + var(--s2) - var(--gutter))); }
+
+/* ---------- labelled actions: circled icon + lowercase word ---------- */
+.action {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: var(--w-light) 19px/1 var(--font);
+  color: var(--text);
+  transition: color var(--t-fast);
+}
+.action:hover { color: var(--accent-text); }
+.action:active .round { transform: scale(.92); }
+.action.is-active .round { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
+.pane-actions { margin-bottom: var(--s2); }
+
+/* ---------- window controls (frameless window) ---------- */
+.window-controls { position: fixed; top: 0; right: 0; z-index: 40; display: flex; }
+.window-controls button {
+  width: 46px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+  transition: color var(--t-fast), background-color var(--t-fast);
+}
+.window-controls button:hover { color: var(--text); background: var(--surface-2); }
+.window-controls .is-close:hover { color: #fff; background: #e81123; }
+.window-controls svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1; }
+/* keep top-right content (clock, follow, mode label) clear of the buttons */
+:root[data-frameless] { --window-controls-w: 138px; }
+:root[data-frameless] :is(.home-bar, .hub-bar) { padding-right: max(0px, calc(var(--window-controls-w) - var(--gutter) + 8px)); }
+:root[data-frameless] .now-top { padding-right: calc(var(--window-controls-w) + 8px); }
+
+/* Top bars move the window (Tauri: data-tauri-drag-region). Text inside them lets the press fall
+   through to the bar, so dragging the label or clock moves the window too; buttons still click. */
+[data-tauri-drag-region] * { pointer-events: none; }
+[data-tauri-drag-region] :is(button, input, a, label) { pointer-events: auto; }

@@ -1,0 +1,29 @@
+{
+  "name": "zplayer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "tauri": "node scripts/tauri.mjs",
+    "design": "node scripts/design-preview.mjs",
+    "theme:sync": "node scripts/design-preview.mjs --once"
+  },
+  "dependencies": {
+    "@zplayer/theme": "0.1.0",
+    "@tauri-apps/api": "^2.9.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.9.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

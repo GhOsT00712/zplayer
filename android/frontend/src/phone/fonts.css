@@ -1,0 +1,10 @@
+/* Selawik: Microsoft's open-source stand-in for Segoe UI (SIL Open Font License 1.1, see
+   fonts/Selawik-LICENSE.txt), from github.com/microsoft/Selawik release 1.01.
+   The theme's font stack is "Segoe UI Variable …", "Segoe UI", Selawik, so Windows keeps the real
+   Segoe UI and Android, which has no Segoe, gets Selawik instead of Roboto. Segoe UI itself can't be
+   shipped in the app: its licence doesn't allow it. */
+@font-face { font-family: Selawik; font-weight: 300; font-style: normal; font-display: swap; src: local("Selawik Light"), url("./fonts/selawkl.woff2") format("woff2"); }
+@font-face { font-family: Selawik; font-weight: 350; font-style: normal; font-display: swap; src: local("Selawik Semilight"), url("./fonts/selawksl.woff2") format("woff2"); }
+@font-face { font-family: Selawik; font-weight: 400; font-style: normal; font-display: swap; src: local("Selawik"), url("./fonts/selawk.woff2") format("woff2"); }
+@font-face { font-family: Selawik; font-weight: 600; font-style: normal; font-display: swap; src: local("Selawik Semibold"), url("./fonts/selawksb.woff2") format("woff2"); }
+@font-face { font-family: Selawik; font-weight: 700; font-style: normal; font-display: swap; src: local("Selawik Bold"), url("./fonts/selawkb.woff2") format("woff2"); }

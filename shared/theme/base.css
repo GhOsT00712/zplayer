@@ -1,0 +1,56 @@
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+body {
+  transition: background-color 300ms, color 300ms;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: var(--w-body) var(--fs-body)/1.45 var(--font-text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button, input { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+img { -webkit-user-drag: none; user-select: none; }
+::selection { background: var(--accent); color: var(--on-accent); }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+* { scrollbar-width: thin; scrollbar-color: var(--scrollbar) transparent; }
+
+/* text styles */
+.t-meta {
+  display: block;
+  font-size: var(--fs-meta);
+  font-weight: var(--w-body);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.t-row { display: block; font: var(--w-light) var(--fs-row)/1.2 var(--font); }
+.t-row-lg { display: block; font: var(--w-light) var(--fs-row-lg)/1.15 var(--font); letter-spacing: -.01em; }
+.t-accent { color: var(--accent-text); }
+.truncate { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* staggered entrance, as on the Zune HD: each row fades in while sliding from left to right, one after
+   another down the list. Set --i on each child (capped at 12 by the caller). Transform and opacity only,
+   so it stays smooth on phones. */
+.stagger > * { animation: row-in var(--t-enter) var(--ease-enter) backwards; animation-delay: calc(var(--i, 0) * var(--stagger)); }
+@keyframes row-in {
+  from { transform: translate3d(-32px, 0, 0); opacity: 0; }
+}
+
+/* reduced motion: data-motion="reduced" on <html>, or the system setting unless data-motion="full".
+   Entrances and transitions finish at once; decorative loops (backdrop pan, artist drift, skeleton pulse) stop.
+   Direct manipulation (pivot drag, seek) still follows the pointer. */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) *, :root:not([data-motion="full"]) *::before, :root:not([data-motion="full"]) *::after {
+    animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important;
+  }
+  :root:not([data-motion="full"]) :is(.backdrop-image, .now-headline span, .skeleton *) { animation: none !important; }
+}
+:root[data-motion="reduced"] *, :root[data-motion="reduced"] *::before, :root[data-motion="reduced"] *::after {
+  animation-duration: 1ms !important; animation-delay: 0ms !important; animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important; transition-delay: 0ms !important; scroll-behavior: auto !important;
+}
+:root[data-motion="reduced"] :is(.backdrop-image, .now-headline span, .skeleton *) { animation: none !important; }

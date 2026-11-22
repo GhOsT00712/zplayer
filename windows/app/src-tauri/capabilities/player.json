@@ -1,0 +1,14 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "player",
+  "description": "Player commands for packaged assets and the app-owned loopback origin",
+  "windows": ["main"],
+  "remote": { "urls": ["http://127.0.0.1:17653/*"] },
+  "permissions": [
+    "allow-auth-settings", "allow-auth-restore", "allow-auth-login", "allow-auth-logout",
+    "allow-spotify-sdk-token", "allow-spotify-api", "allow-spotify-open-source", "allow-loopback-bootstrap",
+    "core:window:allow-set-fullscreen", "core:window:allow-is-fullscreen",
+    "core:window:allow-start-dragging", "core:window:allow-minimize", "core:window:allow-toggle-maximize",
+    "core:window:allow-internal-toggle-maximize", "core:window:allow-is-maximized", "core:window:allow-close"
+  ]
+}

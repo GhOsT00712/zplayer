@@ -1,0 +1,47 @@
+/* App-only bits that the theme doesn't cover. Colours, type and spacing come from theme/tokens.css. */
+
+/* short error or status message, above the player bar */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  z-index: 30;
+  max-width: min(640px, calc(100vw - 2 * var(--gutter)));
+  margin: 0;
+  padding: 12px var(--s2);
+  transform: translateX(-50%);
+  background: var(--surface-2);
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  animation: row-in 300ms var(--ease) backwards;
+}
+
+/* sign-in form */
+.connect-form { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s2); }
+.field {
+  min-width: min(420px, 100%);
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 2px solid var(--text-3);
+  outline: none;
+  background: transparent;
+  font: var(--w-light) 26px/1.2 var(--font);
+  color: var(--text);
+  transition: border-color var(--t-fast);
+}
+.field:focus { border-color: var(--accent-text); }
+.field::placeholder { color: var(--text-2); }
+.code { font: 13px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace; color: var(--text); overflow-wrap: anywhere; }
+
+/* diagnostics event log */
+.log {
+  margin: 0;
+  max-height: 360px;
+  overflow: auto;
+  padding: var(--s2);
+  background: var(--surface);
+  font: 12px/1.5 ui-monospace, "Cascadia Mono", Consolas, monospace;
+  white-space: pre-wrap;
+}
+
+.text-link:disabled { opacity: .5; cursor: default; }

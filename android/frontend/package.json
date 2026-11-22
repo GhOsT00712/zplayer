@@ -1,0 +1,29 @@
+{
+  "name": "zplayer-android-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "The ZPLAYER Android frontend and its browser preview with sample data.",
+  "scripts": {
+    "sync": "node ../scripts/sync-theme.mjs",
+    "dev": "vite --host 127.0.0.1 --port 5177 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
+    "build:app": "tsc --noEmit && vite build --config vite.app.config.ts"
+  },
+  "dependencies": {
+    "@zplayer/theme": "0.1.0",
+    "@tauri-apps/api": "^2.12.5",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

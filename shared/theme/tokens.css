@@ -1,0 +1,111 @@
+/* ZPLAYER design tokens. Dark (default) and light themes, one accent from the presets below. */
+:root {
+  color-scheme: dark;
+
+  /* colour: dark theme */
+  --bg: #000;
+  --surface: #0d0d0d;
+  --surface-2: #161616;
+  --line: #262626;
+  --text: #fff;
+  --text-2: rgba(255, 255, 255, .6);
+  --text-3: rgba(255, 255, 255, .45);
+  --accent: #ff0097;      /* fills: progress, active buttons, selection */
+  --accent-text: #ff0097; /* accent as text, icons and focus rings: >= 4.5:1 on the page */
+  --on-accent: #fff;      /* glyphs on an accent fill: >= 3:1 */
+  --scrollbar: #333;
+  /* app background behind every screen: a soft charcoal glow, darker at the edges */
+  --bg-app: radial-gradient(ellipse 75% 70% at 52% 42%, #2a2628 0%, #171416 48%, #0b090a 100%);
+  --back-ring: rgba(255, 255, 255, .58); /* the back button's grey circle */
+  --bar-bg: rgba(0, 0, 0, .82);
+  --scrim-hub: rgba(0, 0, 0, .8);
+  --scrim-now: linear-gradient(90deg, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .55) 55%, rgba(0, 0, 0, .7) 100%),
+               linear-gradient(0deg, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, 0) 55%);
+
+  /* type */
+  --font: "Segoe UI Variable Display", "Segoe UI", Selawik, system-ui, sans-serif;
+  --font-text: "Segoe UI Variable Text", "Segoe UI", Selawik, system-ui, sans-serif;
+  --fs-hub: clamp(150px, min(26vw, 40vh), 380px);
+  --fs-pivot: clamp(40px, 4.8vw, 68px);
+  --fs-now-headline: clamp(110px, min(22vw, 30vh), 320px);
+  --fs-now-title: clamp(36px, 4.2vw, 60px);
+  --fs-row-lg: 34px;
+  --fs-row: 24px;
+  --fs-body: 15px;
+  --fs-meta: 12px;
+  --w-display: 300;
+  --w-light: 300;
+  --w-body: 400;
+  --w-label: 600;
+  --track-meta: .12em;
+
+  /* space (8 px grid) */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s6: 48px;
+  --gutter: clamp(24px, 4vw, 64px);
+
+  /* motion */
+  --ease: cubic-bezier(.1, .9, .2, 1);
+  --t-fast: 150ms;
+  --t-pivot: 300ms;
+  --t-title: 650ms;
+  --stagger: 35ms;
+  --t-enter: 520ms;                           /* row, tile and menu entrances (row-in) */
+  --ease-enter: cubic-bezier(.22, 1, .36, 1); /* smooth settle for entrances, no snap at the start */
+  --pivot-shift: 48px;
+  --title-step: 9vw;
+}
+
+/* short windows (≤ 720 px tall): smaller headings so lists keep room. Taller windows are unchanged. */
+@media (max-height: 720px) {
+  :root {
+    --fs-hub: clamp(110px, min(26vw, 24vh), 380px);
+    --fs-pivot: clamp(30px, min(4.8vw, 6vh), 68px);
+    --fs-now-headline: clamp(90px, min(22vw, 24vh), 320px);
+  }
+}
+
+/* light theme: same structure, inverted neutrals, same accent */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fff;
+  --surface: #f3f3f3;
+  --surface-2: #e9e9e9;
+  --line: #dcdcdc;
+  --text: #000;
+  --text-2: rgba(0, 0, 0, .6);
+  --text-3: rgba(0, 0, 0, .5);
+  --accent-text: #e30086;
+  --scrollbar: #c8c8c8;
+  --bg-app: radial-gradient(ellipse 75% 70% at 52% 42%, #ffffff 0%, #f2f0f1 52%, #e2dfe0 100%);
+  --back-ring: rgba(0, 0, 0, .45);
+  --bar-bg: rgba(255, 255, 255, .86);
+  --scrim-hub: rgba(255, 255, 255, .84);
+  --scrim-now: linear-gradient(90deg, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, .6) 55%, rgba(255, 255, 255, .72) 100%),
+               linear-gradient(0deg, rgba(255, 255, 255, .88) 0%, rgba(255, 255, 255, 0) 55%);
+}
+
+/* accent presets, drawn from the Zune palette.
+   --accent keeps the original colour for fills. --accent-text is that colour lightened (dark theme) or
+   darkened (light theme) just enough for 4.5:1 on the page background and 3:1 over the album-art scrim.
+   --on-accent is white where white reaches 3:1 on the fill, black otherwise. */
+:root[data-accent="magenta"] { --accent: #ff0097; --accent-text: #ff0097; --on-accent: #fff; }
+:root[data-accent="orange"]  { --accent: #f7941d; --accent-text: #f7941d; --on-accent: #000; }
+:root[data-accent="red"]     { --accent: #e51400; --accent-text: #e93726; --on-accent: #fff; }
+:root[data-accent="blue"]    { --accent: #1ba1e2; --accent-text: #1ba1e2; --on-accent: #000; }
+:root[data-accent="green"]   { --accent: #60a917; --accent-text: #60a917; --on-accent: #000; }
+:root[data-accent="purple"]  { --accent: #a200ff; --accent-text: #b638ff; --on-accent: #fff; }
+:root[data-accent="teal"]    { --accent: #00aba9; --accent-text: #00aba9; --on-accent: #000; }
+:root[data-accent="brown"]   { --accent: #a0522d; --accent-text: #ae6c4d; --on-accent: #fff; }
+
+:root[data-theme="light"][data-accent="magenta"] { --accent-text: #e30086; }
+:root[data-theme="light"][data-accent="orange"]  { --accent-text: #aa6614; }
+:root[data-theme="light"][data-accent="red"]     { --accent-text: #e51400; }
+:root[data-theme="light"][data-accent="blue"]    { --accent-text: #157eb0; }
+:root[data-theme="light"][data-accent="green"]   { --accent-text: #4b8412; }
+:root[data-theme="light"][data-accent="purple"]  { --accent-text: #a200ff; }
+:root[data-theme="light"][data-accent="teal"]    { --accent-text: #008482; }
+:root[data-theme="light"][data-accent="brown"]   { --accent-text: #a0522d; }

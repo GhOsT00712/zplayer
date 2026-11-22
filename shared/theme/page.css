@@ -1,0 +1,41 @@
+/* ---------- shell and routes ---------- */
+.shell { position: relative; height: 100%; display: flex; flex-direction: column; overflow: hidden; background: var(--bg-app); }
+.shell > :not(.backdrop) { position: relative; z-index: 1; }
+.shell-main { flex: 1; min-height: 0; }
+.route { position: absolute; inset: 0; transform-origin: left center; animation: page-in 420ms var(--ease) backwards; }
+.route[hidden] { display: none; }
+/* Turnstile: pages swing in from the left edge. */
+@keyframes page-in { from { transform: perspective(1600px) rotateY(-14deg) translateX(-24px); opacity: 0; } }
+
+/* ---------- detail page ---------- */
+.page { position: relative; height: 100%; overflow: hidden; }
+.page > :not(.backdrop):not(.back-corner) { position: relative; z-index: 1; }
+.page-scroll { height: 100%; overflow-y: auto; padding: var(--s2) var(--gutter) var(--s6); }
+.page-bar { display: flex; align-items: center; min-height: 40px; }
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s4);
+  margin: var(--s4) 0 var(--s4);
+  animation: row-in var(--t-enter) var(--ease-enter) backwards;
+}
+.page-art { width: clamp(160px, 20vw, 280px); aspect-ratio: 1; flex: none; display: block; }
+.page-copy { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.page-title {
+  margin: 0;
+  font: var(--w-light) clamp(44px, 6vw, 88px)/1 var(--font);
+  letter-spacing: -.03em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.page-sub { font: var(--w-light) 26px/1.2 var(--font); color: var(--text-2); }
+.page-sub button { transition: color var(--t-fast); }
+.page-sub button:hover { color: var(--accent-text); }
+.page-actions { margin-top: var(--s2); }
+.page-body { max-width: 980px; }
+
+@media (max-width: 760px) {
+  .page-head { flex-direction: column; align-items: flex-start; }
+}

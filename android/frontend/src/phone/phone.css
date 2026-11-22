@@ -1,0 +1,292 @@
+/* ZPLAYER on a phone: portrait sizes and layouts on top of @zplayer/theme.
+   Everything screen-size related sits in one @media (max-width: 600px) block, so the Tauri app can
+   load this file unchanged. Colours, accents, type, buttons and motion are not changed here.
+   DESIGN-PLAN.md sections 3 and 4 explain the values. */
+
+/* ---------- system insets ----------
+   The app runs full screen: the status bar is hidden (it slides in for a moment when you swipe down
+   from the top), so the top inset is 0. The gesture bar stays, drawn over the app. */
+:root {
+  --inset-top: env(safe-area-inset-top, 0px);
+  --inset-bottom: env(safe-area-inset-bottom, 0px);
+}
+/* No browser tap feedback: Android's WebView draws a blue square behind whatever you tap or hold,
+   and a long press can select text or open a callout. The theme's own press states stay. */
+*, *::before, *::after {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+button, [role="button"], a, img, svg { -webkit-user-select: none; user-select: none; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* mock only: the review page draws a stand-in gesture bar of a typical size */
+:root.sim-bars { --inset-top: 0px; --inset-bottom: 22px; }
+
+@media (max-width: 600px) {
+  :root {
+    --gutter: 20px;
+    --fs-hub: clamp(140px, 50vw, 210px);
+    --fs-pivot: clamp(30px, 8.5vw, 38px);
+    --fs-now-headline: clamp(84px, 26vw, 112px);
+    --fs-now-title: 26px;
+    --fs-row-lg: 28px;
+    --fs-row: 20px;
+    --fs-menu: clamp(36px, 10.4vw, 46px);
+    --title-step: 18vw;
+    /* now playing: the blurred art shows through evenly, a little darker at the bottom where the controls are */
+    --scrim-now: linear-gradient(180deg, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .45) 55%, rgba(0, 0, 0, .78) 100%);
+  }
+  :root[data-theme="light"] {
+    --scrim-now: linear-gradient(180deg, rgba(255, 255, 255, .6) 0%, rgba(255, 255, 255, .55) 55%, rgba(255, 255, 255, .82) 100%);
+  }
+
+  /* Keep the whole back ring visible and reserve its space above page content. */
+  :root { --back-size: 76px; --back-top: 8px; --back-left: 12px; }
+  .back-corner { --size: var(--back-size); top: calc(var(--inset-top) + var(--back-top)); left: var(--back-left); }
+  .back-corner svg { width: 40px; height: 40px; stroke-width: 3.4; }   /* a big, bold arrow (the theme draws it at 2.4); the ring border is the theme's */
+  .back-corner:focus-visible { outline-offset: -12px; }
+  .clear-back { margin-left: calc(var(--back-left) + var(--back-size) + 16px - var(--gutter)); }
+  :is(.hub-bar, .page-bar, .text-page-bar).clear-back { min-height: calc(var(--back-size) + 2 * var(--back-top)); }
+
+  /* ---------- hubs ---------- */
+  .hub-head { padding-top: calc(var(--inset-top) + 4px); }
+  .hub-head:has(.clear-back) { padding-top: var(--inset-top); }
+  .hub-bar:not(.clear-back) { display: none; }               /* a hub with nothing in its top bar */
+  .hub-bar .action { font-size: 17px; }
+  .hub-bar .action .round { width: 36px; height: 36px; }
+  .hub-title { line-height: .86; }
+  .hub-sub { margin-top: 4px; }
+  .pivot-strip { gap: 22px; padding-top: 4px; }
+  .pivot-pane { padding: 14px var(--gutter) 24px; scrollbar-width: none; }
+  .pivot-pane::-webkit-scrollbar { display: none; }
+  .pane-actions { margin-bottom: 12px; gap: 12px 24px; }
+  .row-art { width: 52px; height: 52px; }
+  .tile-grid { gap: 18px 12px; }
+  .tile-title { font-size: var(--fs-row); }
+  .search-box input { font-size: 28px; }
+  .search-box svg { width: 24px; height: 24px; }
+
+  /* ---------- mini player: title, artist, play and next; sits above the gesture bar ---------- */
+  .mini { gap: 12px; padding: 10px var(--gutter) calc(10px + var(--inset-bottom)); }
+  .mini-art { width: 48px; height: 48px; }
+  .mini-copy .t-accent { display: none; }                     /* the mode line lives on now playing */
+  .mini-title { font-size: 20px; }
+  .mini-controls .round:first-child { display: none; }        /* previous: on now playing only */
+  .mini-controls .round { width: 44px; height: 44px; }
+
+  /* with no mini player, scrolling content still clears the gesture bar */
+  .shell:not(:has(.mini)) :is(.pivot-pane, .page-scroll, .text-page-scroll, .home) { padding-bottom: calc(24px + var(--inset-bottom)); }
+
+  /* ---------- home: the menu stacked down the left, tile strips under it ---------- */
+  .home { overflow-y: auto; scrollbar-width: none; }
+  .home::-webkit-scrollbar { display: none; }
+  /* space at the top (about an eighth of the screen), then the menu; the first word lines up with the accent strip */
+  .top-menu.is-stacked { min-height: calc(100% - 140px); }   /* pins peek up from the bottom, about half showing; scroll for the rest */
+  .home-strip { top: calc(var(--inset-top) + 13dvh + 7px); width: 8px; height: 44px; background: var(--accent); }
+  .home-top { padding: calc(var(--inset-top) + 13dvh) var(--gutter) 0; }
+  .home-back { display: none; }                                /* the back gesture leaves the app */
+  .top-menu.is-stacked .home-nav-item { font-size: var(--fs-menu); line-height: 1.36; letter-spacing: -.03em; color: var(--text-2); }
+  .top-menu.is-stacked .home-nav-item.is-current { color: var(--text); }
+  /* the menu words fade in from the left one after another, as on the Zune HD */
+  .top-menu.is-stacked .home-nav-item { animation: row-in var(--t-enter) var(--ease-enter) backwards; }
+  .top-menu.is-stacked .home-nav-item:nth-child(2) { animation-delay: calc(var(--stagger) * 1.5); }
+  .top-menu.is-stacked .home-nav-item:nth-child(3) { animation-delay: calc(var(--stagger) * 3); }
+  .top-menu.is-stacked .home-nav-item:nth-child(4) { animation-delay: calc(var(--stagger) * 4.5); }
+  .top-menu.is-stacked .home-nav-item:nth-child(5) { animation-delay: calc(var(--stagger) * 6); }
+  .top-menu.is-stacked .home-nav-item:nth-child(6) { animation-delay: calc(var(--stagger) * 7.5); }
+  .top-menu.is-stacked .home-nav-item:nth-child(7) { animation-delay: calc(var(--stagger) * 9); }
+
+  /* smoothness on phones: the album-art background fades in but doesn't pan. A blurred image that
+     moves has to be re-blurred every frame, which is what makes phone GPUs stutter. */
+  .backdrop-image { animation: fade-in 900ms ease backwards; }
+  .home-panorama { gap: 18px; padding: 18px 0 24px var(--gutter); }
+  .qp-section, .qp-section.is-end { width: 100%; }
+  .qp-title { margin-bottom: 8px; font-size: 34px; }
+  .qp-tiles {
+    --qp-cell: 80px;
+    max-width: none;
+    overflow-x: auto;
+    padding-right: var(--gutter);
+    scrollbar-width: none;
+  }
+  .qp-tiles::-webkit-scrollbar { display: none; }
+  .qp-tile.is-icon svg { width: 34px; }
+  .qp-tile.is-icon .qp-tile-label { font-size: 16px; }
+
+  /* ---------- album and playlist pages ---------- */
+  .page-scroll { padding: var(--inset-top) var(--gutter) 24px; scrollbar-width: none; }
+  .page-scroll::-webkit-scrollbar { display: none; }
+  .page-bar { min-height: 46px; }
+  .page-head { flex-direction: column; align-items: flex-start; gap: 16px; margin: 16px 0 14px; }
+  .page-art { width: 200px; }
+  .page-title { font-size: 38px; line-height: 1.05; }
+  .page-sub { font-size: 20px; }
+  .page-sub button, .page-sub { color: var(--accent-text); }
+  .page-actions { gap: 12px 22px; margin-top: 12px; }
+  .page-actions .action { font-size: 18px; }
+  .notice { padding-top: 16px; }
+
+  /* ---------- text pages: settings, devices, diagnostics, signed out ---------- */
+  .text-page-scroll { padding: var(--inset-top) var(--gutter) 24px; scrollbar-width: none; }
+  .text-page-scroll::-webkit-scrollbar { display: none; }
+  .text-page-bar { min-height: 46px; }
+  .text-page-title { margin-top: 8px; margin-bottom: 16px; font-size: 104px; }
+  .section { margin-bottom: 28px; }
+  .section-title { font-size: 30px; color: var(--text); }
+  .section dl div { grid-template-columns: 120px minmax(0, 1fr); gap: 12px; }
+  .text-page-body > .page-note { font-size: 15px; }
+
+  /* ---------- the album wall, now only on the lock screen (LockScreen.tsx) ---------- */
+  .mosaic-card { left: var(--gutter); right: var(--gutter); bottom: 72px; }
+  .mosaic-art { width: 104px; }
+}
+
+/* ---------- portrait now playing (PhoneNowPlaying.tsx) ----------
+   Owner's layout (18 Nov 2026): the artist in bold caps, the album in light caps under it, the art,
+   the seek bar along the art's bottom edge with bold times under it, then the song title and the
+   controls. The background is the album art, heavily blurred. "up next" slides in from the right. */
+.pnow {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  transform-origin: left center;
+  animation: now-in 450ms var(--ease) backwards;
+  touch-action: pan-y;
+}
+.pnow > :not(.backdrop):not(.back-corner) { position: relative; z-index: 1; }
+.pnow .back-corner { background: transparent; }             /* over the art, like Windows' .back-now */
+.pnow .backdrop-image { filter: blur(26px) saturate(1.15); }
+.pnow .backdrop-scrim { background: var(--scrim-now); }
+
+.pn-main { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 4px var(--gutter) calc(28px + var(--inset-bottom)); } /* the whole block sits low, controls included */
+.pn-head { flex: none; min-width: 0; animation: row-in var(--t-enter) var(--ease-enter) backwards; }
+.pn-artist {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  margin: 0; padding: 0; text-align: left;
+  font: 700 clamp(32px, 9.6vw, 42px)/1 var(--font);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  transition: color var(--t-fast);
+}
+button.pn-artist:active { color: var(--accent-text); }
+.pn-album {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  margin: 2px 0 0;
+  font: var(--w-light) clamp(24px, 7.2vw, 30px)/1.08 var(--font);
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+}
+
+/* the art about 58% of the width, left aligned, as in the owner's reference; tap it to play or pause */
+.pn-art { flex: none; display: block; width: min(58vw, 280px, calc(100dvh - 560px)); aspect-ratio: 1; margin-top: 14px; padding: 0; }
+.pn-art img { display: block; width: 100%; height: 100%; }
+.pn-art, .pn-seek, .pn-controls { animation: row-in var(--t-enter) var(--ease-enter) backwards; }
+.pn-art { animation-delay: var(--stagger); }
+.pn-seek { animation-delay: calc(var(--stagger) * 2); }
+.pn-controls { animation-delay: calc(var(--stagger) * 4); }
+.pn-art:active img { transform: scale(.985); }
+.pn-seek { flex: none; width: min(58vw, 280px, calc(100dvh - 560px)); }
+.pn-seek .seek { display: block; width: 100%; height: 24px; margin: -11px 0 0; } /* the 3 px track runs along the art's bottom edge */
+.pn-seek .seek::-webkit-slider-thumb { opacity: 1; }        /* touch: always show the thumb */
+.pn-times { display: flex; justify-content: space-between; margin-top: -2px; font: 700 15px/1.2 var(--font-text); font-variant-numeric: tabular-nums; }
+
+.pn-title {
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  margin: 12px 0 0;
+  font: var(--w-light) clamp(28px, 8vw, 34px)/1.25 var(--font);   /* room for descenders (g, y): the two-line clamp hides overflow */
+  padding-bottom: .06em;
+  letter-spacing: -.02em;
+  animation: row-in var(--t-enter) var(--ease-enter) backwards;
+  animation-delay: calc(var(--stagger) * 3);
+}
+.pn-controls { margin-top: 24px; display: flex; flex-direction: column; gap: 30px; }
+.pn-transport, .pn-more { display: flex; align-items: center; justify-content: space-between; }
+.pn-gap { width: 40px; }
+.pn-more .round:not(.is-active) { color: var(--text-2); }
+
+/* up next: a panel that slides in from the right (swipe left on now playing, or the queue button) */
+.pn-queue {
+  position: absolute !important;
+  inset: 0;
+  z-index: 3 !important;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--inset-top) + var(--back-size, 48px) + 2 * var(--back-top, 0px)) var(--gutter) calc(10px + var(--inset-bottom));
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 300ms var(--ease), visibility 0s 300ms;
+}
+.pn-queue.is-open { transform: none; visibility: visible; transition: transform 300ms var(--ease); }
+.pn-queue-title { margin: 0 0 4px; font: var(--w-light) var(--fs-pivot)/1.2 var(--font); text-transform: lowercase; }
+.pn-queue-list { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; touch-action: pan-y; } /* a sideways swipe closes up next */
+.pn-queue-list::-webkit-scrollbar { display: none; }
+.pn-next { list-style: none; margin: 0; padding: 0; }
+.pn-queue .next-row { padding: 7px 0; }
+.pn-queue .next-row.is-active .next-title { color: var(--accent-text); }
+.pn-queue-controls { flex: none; display: flex; align-items: center; justify-content: center; gap: 28px; padding-top: 12px; }
+.pnow:has(.pn-queue.is-open) .back-corner { z-index: 6; }
+/* while up next is open, now playing fades out so the list sits over the blurred art alone */
+.pn-main { transition: opacity 200ms var(--ease); }
+.pnow:has(.pn-queue.is-open) .pn-main { opacity: 0; pointer-events: none; }
+
+/* ---------- settings choices ---------- */
+.choices { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.choice { font: var(--w-light) 22px/1.3 var(--font); color: var(--text-3); transition: color var(--t-fast); }
+.choice[aria-pressed="true"] { color: var(--text); }
+.swatches { display: grid; grid-template-columns: repeat(8, minmax(0, 44px)); gap: 6px; margin-top: 14px; }
+.swatch { aspect-ratio: 1; background: var(--swatch); }
+.swatch[aria-pressed="true"] { outline: 3px solid var(--text); outline-offset: 2px; }
+
+/* ---------- lock screen: the album wall behind a Zune-style clock (LockScreen.tsx) ---------- */
+.lock { position: fixed; inset: 0; z-index: 30; overflow: hidden; touch-action: none; color: #fff; }
+:root[data-theme="light"] .lock { color: #000; }
+.lock.is-leaving { animation: lock-out 320ms var(--ease) forwards; }
+@keyframes lock-out { to { transform: translateY(-100%); } }
+.lock .mosaic { position: absolute; }
+.lock .mosaic .back-corner, .lock .mosaic-hint { display: none; }   /* nothing to go back to on a lock screen */
+.lock-shade {
+  position: absolute; left: 0; right: 0; top: 0; z-index: 25; height: 300px; pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .85) 0%, rgba(0, 0, 0, .55) 55%, rgba(0, 0, 0, 0) 100%);
+}
+:root[data-theme="light"] .lock-shade { background: linear-gradient(180deg, rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, .6) 55%, rgba(255, 255, 255, 0) 100%); }
+.lock-clock { position: absolute; z-index: 26; top: 28px; left: var(--gutter); right: var(--gutter); display: flex; flex-direction: column; pointer-events: none; }
+.lock-time { font: 200 clamp(96px, 30vw, 132px)/.9 var(--font); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.lock-date { margin-top: 6px; font: var(--w-light) 22px/1.2 var(--font); text-transform: lowercase; }
+.lock-date b { font-weight: var(--w-light); color: var(--accent-text); }
+.lock-hint { position: absolute; z-index: 26; left: 0; right: 0; bottom: calc(var(--inset-bottom) + 14px); text-align: center; pointer-events: none; }
+
+/* ---------- mock-only gesture bar and back-gesture bubble ---------- */
+.sys-gesture { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: 22px; display: grid; place-items: center; pointer-events: none; }
+.sys-gesture::before { content: ""; width: 108px; height: 4px; border-radius: 2px; background: var(--text); opacity: .8; }
+
+.edge-back {
+  position: fixed; left: 0; z-index: 70;
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--surface-2); color: var(--text);
+  transform: translateX(calc(var(--pull) * .6 - 40px)); opacity: .9; pointer-events: none;
+}
+.edge-back svg { width: 22px; height: 22px; }
+.edge-back.is-ready { background: var(--accent); color: var(--on-accent); }
+
+/* ---------- Spotify sign-in (signed-out screen, Android app) ---------- */
+.zp-field {
+  display: block; width: 100%; margin: 14px 0 6px; padding: 6px 0;
+  border: 0; border-bottom: 2px solid var(--text-3); background: transparent; color: var(--text);
+  font: var(--w-light) 22px/1.3 var(--font); letter-spacing: .02em; transition: border-color var(--t-fast);
+}
+.zp-field:focus { outline: none; border-color: var(--accent-text); }
+.zp-field::placeholder { color: var(--text-3); }
+.zp-field-note { margin: 0 0 18px !important; font-size: 13px; color: var(--text-2); }
+.zp-error { margin: 16px 0 0 !important; color: var(--accent-text) !important; }
+
+/* ---------- a short message from the Spotify app (Android app) ---------- */
+.zp-toast {
+  position: fixed; z-index: 40; left: var(--gutter); right: var(--gutter); bottom: calc(96px + var(--inset-bottom));
+  padding: 12px 14px; background: var(--surface-2); border-left: 4px solid var(--accent); color: var(--text);
+  font: var(--w-body) 14px/1.4 var(--font-text); animation: row-in var(--t-enter) var(--ease-enter) backwards;
+}

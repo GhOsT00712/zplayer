@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-loopback-bootstrap"
+description = "Enables the loopback_bootstrap command without any pre-configured scope."
+commands.allow = ["loopback_bootstrap"]
+
+[[permission]]
+identifier = "deny-loopback-bootstrap"
+description = "Denies the loopback_bootstrap command without any pre-configured scope."
+commands.deny = ["loopback_bootstrap"]

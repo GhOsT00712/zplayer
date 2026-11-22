@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-auth-settings"
+description = "Enables the auth_settings command without any pre-configured scope."
+commands.allow = ["auth_settings"]
+
+[[permission]]
+identifier = "deny-auth-settings"
+description = "Denies the auth_settings command without any pre-configured scope."
+commands.deny = ["auth_settings"]

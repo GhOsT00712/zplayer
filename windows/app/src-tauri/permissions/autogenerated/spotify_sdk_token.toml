@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-spotify-sdk-token"
+description = "Enables the spotify_sdk_token command without any pre-configured scope."
+commands.allow = ["spotify_sdk_token"]
+
+[[permission]]
+identifier = "deny-spotify-sdk-token"
+description = "Denies the spotify_sdk_token command without any pre-configured scope."
+commands.deny = ["spotify_sdk_token"]

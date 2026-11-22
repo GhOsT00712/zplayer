@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-auth-client-id"
+description = "Enables the auth_client_id command without any pre-configured scope."
+commands.allow = ["auth_client_id"]
+
+[[permission]]
+identifier = "deny-auth-client-id"
+description = "Denies the auth_client_id command without any pre-configured scope."
+commands.deny = ["auth_client_id"]

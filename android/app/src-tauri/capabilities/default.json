@@ -1,0 +1,18 @@
+{
+  "$schema": "../gen/schemas/mobile-schema.json",
+  "identifier": "default",
+  "description": "The phone UI: Android back button, leaving the app from home, Spotify sign-in and Web API",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "core:app:allow-exit",
+    "allow-auth-settings",
+    "allow-auth-restore",
+    "allow-auth-client-id",
+    "allow-auth-login",
+    "allow-auth-logout",
+    "allow-spotify-api"
+  ]
+}

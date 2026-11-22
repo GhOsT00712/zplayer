@@ -1,0 +1,13 @@
+.theme-switch { display: flex; align-items: center; gap: var(--s3); }
+.ts-modes { display: flex; gap: 12px; }
+.ts-modes button {
+  font: var(--w-light) 17px/1 var(--font);
+  color: var(--text-2);
+  transition: color var(--t-fast);
+}
+.ts-modes button:hover { color: var(--text); }
+.ts-modes button[aria-pressed="true"] { color: var(--text); }
+.ts-accents { display: flex; gap: 6px; }
+.ts-dot { width: 16px; height: 16px; background: var(--dot); transition: transform var(--t-fast); }
+.ts-dot:hover { transform: scale(1.15); }
+.ts-dot[aria-pressed="true"] { outline: 2px solid var(--text); outline-offset: 2px; }

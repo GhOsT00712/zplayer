@@ -1,0 +1,14 @@
+{
+  "name": "@zplayer/theme",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./base.css": "./base.css",
+    "./tokens.css": "./tokens.css"
+  },
+  "peerDependencies": {
+    "react": "^19.2.0"
+  }
+}

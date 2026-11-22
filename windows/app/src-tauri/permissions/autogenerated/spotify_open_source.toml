@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-spotify-open-source"
+description = "Enables the spotify_open_source command without any pre-configured scope."
+commands.allow = ["spotify_open_source"]
+
+[[permission]]
+identifier = "deny-spotify-open-source"
+description = "Denies the spotify_open_source command without any pre-configured scope."
+commands.deny = ["spotify_open_source"]

@@ -1,0 +1,19 @@
+{
+  "name": "zplayer-workspace",
+  "private": true,
+  "workspaces": [
+    "android/app",
+    "android/frontend",
+    "windows",
+    "shared/theme"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build:android": "npm run apk --workspace zplayer-android-app",
+    "build:windows": "npm run tauri --workspace zplayer -- build",
+    "preview:android": "npm run dev --workspace zplayer-android-frontend"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

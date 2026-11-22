@@ -1,12 +1,12 @@
 // Link between the phone app and the review page (review.html), which shows the app in an iframe.
 // Both are served from the same origin, so the review page calls window.zpMock directly.
 import type { DataState } from '@zplayer/theme';
-import type { MotionPref, ThemePref } from './usePrefs';
+import type { MotionPref, ThemePref } from '../platform/usePrefs';
 import type { Accent } from '@zplayer/theme';
 
 export const screens = [
-  'home', 'quickplay', 'music', 'music-albums', 'search', 'artist', 'album', 'playlist', 'playlist-not-yours',
-  'now', 'up-next', 'lock', 'devices', 'settings', 'diagnostics', 'signed-out', 'no-spotify-app',
+  'home', 'music', 'music-history', 'music-albums', 'music-artists', 'music-playlists', 'search', 'artist', 'album', 'playlist',
+  'playlist-not-yours', 'now', 'up-next', 'lock', 'devices', 'settings', 'diagnostics', 'signed-out', 'no-spotify-app',
 ] as const;
 export type Screen = typeof screens[number];
 

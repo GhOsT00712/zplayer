@@ -63,9 +63,20 @@ export function PhoneNowPlaying({ track, controls, queue, queueOpen, onQueue, on
         <p className="pn-album">{track.album}</p>
       </header>
 
-      <button type="button" className="pn-art" onClick={controls.onToggle} aria-label={playLabel}>
-        <img key={track.art} src={track.art} alt={`${track.album} cover`} />
-      </button>
+      <div className="pn-art-row">
+        <button type="button" className="pn-art" onClick={controls.onToggle} aria-label={playLabel}>
+          <img key={track.art} src={track.art} alt={`${track.album} cover`} />
+        </button>
+        <div className="pn-side">
+          {controls.onShuffle && <RoundButton label="shuffle" size="sm" active={controls.shuffle} onClick={controls.onShuffle}><ShuffleIcon /></RoundButton>}
+          {controls.onRepeat && <RoundButton label={`repeat ${controls.repeat ?? 'off'}`} size="sm" active={(controls.repeat ?? 'off') !== 'off'}
+            onClick={controls.onRepeat}><RepeatIcon one={controls.repeat === 'one'} /></RoundButton>}
+          {controls.onLike && <RoundButton label={controls.liked ? 'unlike' : 'like'} size="sm" active={controls.liked}
+            onClick={controls.onLike}><HeartIcon filled={controls.liked} /></RoundButton>}
+          {onDevices && <RoundButton label="devices" size="sm" onClick={onDevices}><DevicesIcon /></RoundButton>}
+          <RoundButton label="up next" size="sm" onClick={() => onQueue(true)}><QueueIcon /></RoundButton>
+        </div>
+      </div>
       <div className="pn-seek">
         <input type="range" className="seek" min={0} max={track.durationMs || 1} step={1000}
           value={Math.min(controls.positionMs, track.durationMs)} style={{ '--p': progress } as CSSProperties}
@@ -80,22 +91,9 @@ export function PhoneNowPlaying({ track, controls, queue, queueOpen, onQueue, on
 
       <div className="pn-controls">
         <div className="pn-transport">
-          {controls.onShuffle
-            ? <RoundButton label="shuffle" size="sm" active={controls.shuffle} onClick={controls.onShuffle}><ShuffleIcon /></RoundButton>
-            : <span className="pn-gap" />}
           <RoundButton label="previous" onClick={controls.onPrevious}><PreviousIcon /></RoundButton>
           <RoundButton label={playLabel} size="lg" onClick={controls.onToggle}>{playIcon}</RoundButton>
           <RoundButton label="next" onClick={controls.onNext}><NextIcon /></RoundButton>
-          {controls.onRepeat
-            ? <RoundButton label={`repeat ${controls.repeat ?? 'off'}`} size="sm" active={(controls.repeat ?? 'off') !== 'off'}
-                onClick={controls.onRepeat}><RepeatIcon one={controls.repeat === 'one'} /></RoundButton>
-            : <span className="pn-gap" />}
-        </div>
-        <div className="pn-more">
-          {controls.onLike && <RoundButton label={controls.liked ? 'unlike' : 'like'} size="sm" active={controls.liked}
-            onClick={controls.onLike}><HeartIcon filled={controls.liked} /></RoundButton>}
-          {onDevices && <RoundButton label="devices" size="sm" onClick={onDevices}><DevicesIcon /></RoundButton>}
-          <RoundButton label="up next" size="sm" onClick={() => onQueue(true)}><QueueIcon /></RoundButton>
         </div>
       </div>
     </div>

@@ -28,6 +28,8 @@
   pointer-events: none; /* decorative: its tall line box overlaps the search box and pivot strip below */
 }
 
+.hub-title-probe { position: absolute; width: var(--title-step); height: 0; visibility: hidden; }
+
 .pivot-strip {
   flex: none;
   display: flex;

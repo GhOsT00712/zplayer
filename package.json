@@ -5,7 +5,8 @@
     "android/app",
     "android/frontend",
     "windows",
-    "shared/theme"
+    "shared/theme",
+    "shared/library"
   ],
   "scripts": {
     "typecheck": "npm run typecheck --workspaces --if-present",

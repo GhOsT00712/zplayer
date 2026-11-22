@@ -89,7 +89,9 @@
   flex: none;
   overflow: hidden;
   white-space: nowrap;
-  margin: 0 0 0 calc(var(--gutter) - .07em);
+  /* the clip must leave room for descenders (g, y, p): padding grows the box, the negative margin gives it back */
+  padding-bottom: .3em;
+  margin: 0 0 -.3em calc(var(--gutter) - .07em);
   font: 200 var(--fs-now-headline)/.9 var(--font);
   letter-spacing: -.05em;
   user-select: none;
@@ -113,7 +115,7 @@
 .now-copy { min-width: 0; }
 .now-title {
   margin: 0;
-  font: var(--w-light) var(--fs-now-title)/1.05 var(--font);
+  font: var(--w-light) var(--fs-now-title)/1.2 var(--font);   /* room for the bottoms of g and y: the clamp clips */
   letter-spacing: -.02em;
   display: -webkit-box;
   -webkit-line-clamp: 2;

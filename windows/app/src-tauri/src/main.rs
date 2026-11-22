@@ -4,7 +4,7 @@ mod auth;
 mod origin;
 
 use auth::{
-    auth_login, auth_logout, auth_restore, auth_settings, spotify_api, spotify_open_source,
+    auth_login, auth_logout, auth_restore, auth_scopes, auth_settings, spotify_api, spotify_open_source,
     spotify_sdk_token,
 };
 use origin::{allow_navigation, loopback_bootstrap};
@@ -13,11 +13,12 @@ use tauri::{webview::NewWindowResponse, WebviewUrl, WebviewWindowBuilder};
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .manage(auth::Auth::new())
+        .manage(auth::new_auth())
         .manage(origin::FrontendServer::default())
         .invoke_handler(tauri::generate_handler![
             auth_settings,
             auth_restore,
+            auth_scopes,
             auth_login,
             auth_logout,
             spotify_sdk_token,

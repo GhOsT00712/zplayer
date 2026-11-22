@@ -13,7 +13,8 @@ ZPLAYER is a Spotify player with Windows and portrait Android apps built with Ta
 | `android/` | Tauri Android app, Kotlin Spotify bridge, and portrait frontend |
 | `windows/` | Tauri Windows app in `app/src-tauri/` and desktop frontend in `src/` |
 | `shared/theme/` | React components and CSS imported by both frontends as `@zplayer/theme` |
-| `shared/spotify-auth/` | Rust helpers for Spotify PKCE and refresh tokens |
+| `shared/library/` | `@zplayer/library`: your library (liked songs and playlist songs), sync, likes, history, search and playback contract, plus React hooks |
+| `shared/spotify-auth/` | Rust crate for Spotify sign-in, token refresh, the API proxy and scopes |
 
 Run `npm ci` at the repository root to install all JavaScript workspaces from
 one lockfile. Run `npm run typecheck` to check both frontends. After installing

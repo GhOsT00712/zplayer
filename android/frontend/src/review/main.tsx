@@ -11,8 +11,8 @@ import type { DataState } from '@zplayer/theme';
 import type { MockApi, ReviewState, Screen } from '../mock/bridge';
 
 const goTo: [Screen, string][] = [
-  ['home', 'home'], ['quickplay', 'quickplay'], ['music', 'music › songs'], ['music-albums', 'music › albums'],
-  ['search', 'search'], ['artist', 'artist'], ['album', 'album'], ['playlist', 'playlist'],
+  ['home', 'home'], ['music', 'music › songs'], ['music-history', 'music › history'], ['music-albums', 'music › albums'],
+  ['music-artists', 'music › artists'], ['music-playlists', 'music › playlists'], ['search', 'search'], ['artist', 'artist'], ['album', 'album'], ['playlist', 'playlist'],
   ['playlist-not-yours', 'playlist, not yours'], ['now', 'now playing'], ['up-next', 'up next'], ['lock', 'lock screen'],
   ['devices', 'devices'], ['settings', 'settings'], ['diagnostics', 'diagnostics'], ['signed-out', 'signed out'],
   ['no-spotify-app', 'no spotify app'],

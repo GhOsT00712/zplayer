@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { BackButton } from './Controls';
 import { Backdrop } from './Player';
 import './hub.css';
@@ -56,9 +56,29 @@ export function Hub({ title, items, initial = 0, brand, actions, background, foo
 
   usePivotInput(rootRef, step, inputEnabled);
 
+  // The title slides left a step per pivot, but never so far that the word is gone: at most 55% of it
+  // slides off, so the right-hand part always stays on screen.
+  const wordRef = useRef<HTMLSpanElement>(null);
+  const probeRef = useRef<HTMLElement>(null);
+  const [cycle, setCycle] = useState<{ word: number; step: number } | null>(null);
+  useLayoutEffect(() => {
+    const measure = () => {
+      const word = wordRef.current?.offsetWidth;
+      const step = probeRef.current?.offsetWidth;
+      if (word && step) setCycle(previous => previous?.word === word && previous.step === step ? previous : { word, step });
+    };
+    measure();
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+    if (wordRef.current) observer?.observe(wordRef.current);
+    return () => observer?.disconnect();
+  }, [title]);
+
   const item = items[active];
   if (!item) return null;
-  const titleStyle = { '--title-x': `calc(${-active} * var(--title-step))` } as CSSProperties;
+  const shift = cycle ? -Math.min(active * cycle.step, cycle.word * 0.55) : 0;
+  const titleStyle = {
+    '--title-x': cycle ? `${shift}px` : `calc(${-active} * var(--title-step))`,
+  } as CSSProperties;
 
   return <div className="hub" ref={rootRef}>
     <Backdrop src={background} variant="hub" />
@@ -70,7 +90,10 @@ export function Hub({ title, items, initial = 0, brand, actions, background, foo
         </span>
         {actions}
       </div>
-      <h1 className="hub-title" style={titleStyle}>{title}</h1>
+      <h1 className="hub-title" style={titleStyle}>
+        <span ref={wordRef}>{title}</span>
+        <i className="hub-title-probe" ref={probeRef} aria-hidden="true" />
+      </h1>
       {subheader && <div className="hub-sub">{subheader}</div>}
     </header>
     <PivotStrip items={items} active={active} direction={direction} seq={seq}

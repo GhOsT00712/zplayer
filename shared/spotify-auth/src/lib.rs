@@ -1,25 +1,16 @@
-//! Spotify OAuth primitives used by the Android and Windows apps.
+//! Spotify sign-in and Web API access shared by the Windows and Android apps.
+//!
+//! Each app supplies only what differs by OS: the redirect handling, a [`CredentialStore`] and thin
+//! Tauri command wrappers. Everything else (PKCE, token refresh, the API proxy, errors, scopes) is here.
 
-use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
-use sha2::{Digest, Sha256};
+pub mod failure;
+pub mod pkce;
+pub mod proxy;
+pub mod scopes;
+pub mod session;
+pub mod store;
 
-pub const TOKEN_ENDPOINT: &str = "https://accounts.spotify.com/api/token";
-
-/// Generate the code verifier and OAuth state for a new sign-in.
-pub fn new_pkce_parameters() -> (String, String) {
-    (
-        URL_SAFE_NO_PAD.encode(rand::random::<[u8; 64]>()),
-        URL_SAFE_NO_PAD.encode(rand::random::<[u8; 32]>()),
-    )
-}
-
-pub fn pkce_challenge(verifier: &str) -> String {
-    URL_SAFE_NO_PAD.encode(Sha256::digest(verifier.as_bytes()))
-}
-
-/// Spotify can omit the refresh token when the current one remains valid.
-pub fn select_refresh_token(new: Option<&str>, previous: Option<&str>) -> Option<String> {
-    new.filter(|value| !value.is_empty())
-        .or(previous)
-        .map(str::to_owned)
-}
+pub use failure::Failure;
+pub use pkce::{new_pkce_parameters, pkce_challenge, select_refresh_token};
+pub use session::{Auth, TOKEN_ENDPOINT};
+pub use store::{Credential, CredentialStore};

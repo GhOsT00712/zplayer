@@ -12,6 +12,7 @@
     "build:app": "tsc --noEmit && vite build --config vite.app.config.ts"
   },
   "dependencies": {
+    "@zplayer/library": "0.1.0",
     "@zplayer/theme": "0.1.0",
     "@tauri-apps/api": "^2.12.5",
     "react": "^19.2.0",

@@ -4,6 +4,7 @@ fn main() {
         tauri_build::AppManifest::new().commands(&[
             "auth_settings",
             "auth_restore",
+            "auth_scopes",
             "auth_client_id",
             "auth_login",
             "auth_logout",

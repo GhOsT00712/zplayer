@@ -12,10 +12,11 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_deep_link::init())
-        .manage(auth::Auth::new())
+        .manage(auth::Android::new())
         .invoke_handler(tauri::generate_handler![
             auth::auth_settings,
             auth::auth_restore,
+            auth::auth_scopes,
             auth::auth_client_id,
             auth::auth_login,
             auth::auth_logout,
@@ -23,13 +24,13 @@ pub fn run() {
         ])
         .setup(|app| {
             let handle = app.handle().clone();
-            app.state::<auth::Auth>().set_store(&handle);
+            app.state::<auth::Android>().set_store(&handle);
             // Spotify's sign-in page sends the browser to io.zplayer.android://callback, which
             // Android opens in this app; pass it to the waiting sign-in.
             let links = handle.clone();
             app.deep_link().on_open_url(move |event| {
                 for url in event.urls() {
-                    links.state::<auth::Auth>().deep_link(&url);
+                    links.state::<auth::Android>().deep_link(&url);
                 }
             });
             Ok(())

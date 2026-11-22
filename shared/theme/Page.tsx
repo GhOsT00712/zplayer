@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
 import { BackButton } from './Controls';
 import { Backdrop } from './Player';
 import './page.css';
@@ -16,9 +16,29 @@ export function Shell({ background, header, footer, children }: { background?: s
   </div>;
 }
 
+const RouteVisible = createContext(true);
+
+/**
+ * Lets a page put its own image behind the whole shell (menu bar included) instead of only behind
+ * the page. The app provides the setter and passes the image to `Shell` as `background`.
+ */
+export const PageBackground = createContext<((url: string | undefined) => void) | null>(null);
+
+/** Sets the shell background while this page is the visible one. */
+export function usePageBackground(url: string | undefined) {
+  const set = useContext(PageBackground);
+  const visible = useContext(RouteVisible);
+  useEffect(() => {
+    if (!set || !visible || !url) return;
+    set(url);
+    return () => set(undefined);
+  }, [set, visible, url]);
+  return !!set;
+}
+
 /** A page in the navigation stack. Hidden pages stay mounted so they keep pivot and scroll state. */
 export function Route({ visible, children }: { visible: boolean; children: ReactNode }) {
-  return <div className="route" hidden={!visible}>{children}</div>;
+  return <div className="route" hidden={!visible}><RouteVisible.Provider value={visible}>{children}</RouteVisible.Provider></div>;
 }
 
 /**
@@ -36,8 +56,9 @@ export function DetailPage({ onBack, background, art, kicker, title, subtitle, m
   actions?: ReactNode;
   children: ReactNode;
 }) {
+  const shellHasIt = usePageBackground(background);
   return <div className="page">
-    <Backdrop src={background} variant="hub" />
+    {!shellHasIt && <Backdrop src={background} variant="hub" />}
     <BackButton onClick={onBack} />
     <div className="page-scroll">
       <div className="page-bar clear-back" data-tauri-drag-region data-no-swipe><span className="t-meta">{kicker}</span></div>

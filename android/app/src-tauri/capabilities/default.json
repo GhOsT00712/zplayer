@@ -10,6 +10,7 @@
     "core:app:allow-exit",
     "allow-auth-settings",
     "allow-auth-restore",
+    "allow-auth-scopes",
     "allow-auth-client-id",
     "allow-auth-login",
     "allow-auth-logout",

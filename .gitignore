@@ -8,6 +8,7 @@
 !/android/
 !/windows/
 !/shared/
+!/docs/
 
 # Local design material and session notes.
 /.claude/

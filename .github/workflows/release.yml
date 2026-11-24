@@ -1,0 +1,121 @@
+# Builds the Windows installer and the signed Android APK when a version tag is pushed, then
+# attaches them to a DRAFT GitHub release. Review the draft and press Publish.
+#
+#   git tag v0.3.0 && git push origin v0.3.0
+#
+# Needs four repository secrets for the Android signing key (see docs/releasing.md).
+name: release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to build, for example v0.3.0'
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  TAG: ${{ github.event.inputs.tag || github.ref_name }}
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ env.TAG }}' }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: 'windows/app/src-tauri -> target' }
+      - name: Check the tag matches the app version
+        shell: bash
+        run: |
+          v=$(node -p "require('./windows/app/src-tauri/tauri.conf.json').version")
+          [ "v$v" = "$TAG" ] || { echo "Tag $TAG does not match app version $v"; exit 1; }
+      - run: npm ci
+      - run: npm run build:windows
+      - name: Stage the installer
+        shell: bash
+        run: |
+          mkdir dist
+          v="${TAG#v}"
+          cp "windows/app/src-tauri/target/release/bundle/nsis/ZPLAYER_${v}_x64-setup.exe" "dist/ZPLAYER_${v}_windows-x64-setup.exe"
+      - uses: actions/upload-artifact@v4
+        with: { name: windows, path: dist/*, if-no-files-found: error }
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: '${{ env.TAG }}' }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - uses: dtolnay/rust-toolchain@stable
+        with: { targets: aarch64-linux-android }
+      - uses: Swatinem/rust-cache@v2
+        with: { workspaces: 'android/app/src-tauri -> target' }
+      - name: Android SDK and NDK
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-37" "ndk;29.0.14206865"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/29.0.14206865" >> "$GITHUB_ENV"
+      - name: Spotify App Remote library
+        run: |
+          mkdir -p android/app/src-tauri/gen/android/app/libs
+          f=android/app/src-tauri/gen/android/app/libs/spotify-app-remote-release-0.8.0.aar
+          curl -fsSL -o "$f" https://github.com/spotify/android-sdk/releases/download/v0.8.0-appremote_v2.1.0-auth/spotify-app-remote-release-0.8.0.aar
+          echo "b5a6dd880eaf01f63a871cba9ef7af77c341f8a94ffc8fdf2e9021f9a9d4c198  $f" | sha256sum -c -
+      - name: Check the tag matches the app version
+        run: |
+          v=$(node -p "require('./android/app/src-tauri/tauri.conf.json').version")
+          [ "v$v" = "$TAG" ] || { echo "Tag $TAG does not match app version $v"; exit 1; }
+      - name: Signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          [ -n "$KEYSTORE_BASE64" ] || { echo "Missing the ANDROID_KEYSTORE_BASE64 secret"; exit 1; }
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          {
+            echo "storeFile=$RUNNER_TEMP/release.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > android/app/src-tauri/gen/android/keystore.properties
+      - run: npm ci
+      - run: npm run apk:release --workspace zplayer-android-app
+      - name: Stage the APK and check its signature
+        run: |
+          mkdir dist
+          v="${TAG#v}"
+          apk=android/app/src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release.apk
+          cp "$apk" "dist/ZPLAYER_${v}_android-arm64.apk"
+          bt=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          "$bt/apksigner" verify --print-certs "dist/ZPLAYER_${v}_android-arm64.apk" | grep "SHA-1"
+      - uses: actions/upload-artifact@v4
+        with: { name: android, path: dist/*, if-no-files-found: error }
+
+  release:
+    needs: [windows, android]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { path: dist, merge-multiple: true }
+      - name: Checksums
+        working-directory: dist
+        run: sha256sum ZPLAYER_* > SHA256SUMS.txt && cat SHA256SUMS.txt
+      - name: Draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --draft --verify-tag \
+            --title "ZPLAYER ${TAG#v}" --generate-notes dist/*

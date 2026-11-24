@@ -8,6 +8,7 @@
 !/android/
 !/windows/
 !/shared/
+!/.github/
 !/docs/
 
 # Local design material and session notes.

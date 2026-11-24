@@ -1,6 +1,6 @@
 # Library MVP plan (Windows and Android)
 
-Status: **MVP built; v0.1.0 published, v0.2.0 (button motion) prepared as a draft (24 Nov 2026).** Last updated 24 Nov 2026.
+Status: **MVP built; v0.1.0 and v0.2.0 (button motion) published (24 Nov 2026).** Last updated 24 Nov 2026.
 Other Claude threads: read this block first, update the table when a milestone changes, and keep it short.
 
 ## Where things are
@@ -30,7 +30,7 @@ Other Claude threads: read this block first, update the table when a milestone c
 | 6 | Polish: states, refresh library, large library | Done | 6,000-song test, preview states | none |
 | R1 | Release v0.1.0 (Windows installer + signed Android APK) | Done, published: <https://github.com/GhOsT00712/zplayer/releases/tag/v0.1.0> | APK signature and fingerprint checked; Windows installer built; checksums attached | The release APK and installer have not been run by anyone yet; the owner's phone still has the debug build |
 | M1 | Button motion: back-button press, one press feel for all buttons, 52 px Android back ring (`button-motion-plan.md`) | Done | Typecheck; browser preview computed styles; press seen on the Pixel 6a | Quick taps on other buttons, hardware back and reduced motion not checked on a device; Windows window not driven |
-| R2 | Release v0.2.0 | Draft release, not published | See release notes | Owner to review and publish |
+| R2 | Release v0.2.0 (button motion; Windows installer + signed Android APK) | Done, published: <https://github.com/GhOsT00712/zplayer/releases/tag/v0.2.0> | APK signed with the same release key (SHA-1 matches v0.1.0); checksums attached | Release APK and installer not yet run by anyone. Automated builds: `.github/workflows/release.yml` and `docs/releasing.md` (needs the four signing secrets; untested) |
 
 ### Changes made after the first build (from the owner's feedback)
 

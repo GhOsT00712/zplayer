@@ -6,7 +6,8 @@
   "description": "The Tauri Android app that packages the React frontend from ../frontend.",
   "scripts": {
     "tauri": "tauri",
-    "apk": "node scripts/build-apk.mjs"
+    "apk": "node scripts/build-apk.mjs",
+    "apk:release": "node scripts/build-apk.mjs --release"
   },
   "devDependencies": {
     "@tauri-apps/cli": "2.12.5"

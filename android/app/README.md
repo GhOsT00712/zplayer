@@ -41,6 +41,30 @@ the last several years). Tauri links the Rust library in with a symbolic link, w
 allows in Developer Mode; without it, the script copies the library in and runs Gradle itself.
 For an x86_64 emulator, run `npx tauri android build --apk --debug --target x86_64` instead.
 
+## Signed release APK
+
+A release APK must be signed with your own key. Create a keystore once and keep it (and its passwords)
+outside Git; if you lose it, nobody can update an installed app.
+
+```powershell
+keytool -genkeypair -keystore $env:USERPROFILE\.zplayer\zplayer-release.jks -alias zplayer `
+  -keyalg RSA -keysize 2048 -validity 10000
+```
+
+Then create `src-tauri/gen/android/keystore.properties` (it is git-ignored):
+
+```text
+storeFile=C:/Users/you/.zplayer/zplayer-release.jks
+storePassword=...
+keyAlias=zplayer
+keyPassword=...
+```
+
+Run `npm run apk:release --workspace zplayer-android-app` from the repository root. The signed APK is
+`src-tauri/gen/android/app/build/outputs/apk/arm64/release/app-arm64-release.apk`. Register the
+key's SHA-1 (`keytool -list -v -keystore <file>`) with package `io.zplayer.android` in the Spotify
+dashboard. A release-signed APK cannot be installed over a debug-signed one; uninstall first.
+
 ## Connect Spotify
 
 Install and sign into Spotify on the phone. Use a Spotify Premium account and a

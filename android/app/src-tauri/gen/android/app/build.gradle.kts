@@ -14,8 +14,27 @@ val tauriProperties = Properties().apply {
     }
 }
 
+// Release signing: keystore.properties (git-ignored, next to the root build.gradle) names the keystore.
+// Without it a release build is left unsigned. See app/README.md.
+val keystoreProperties = Properties().apply {
+    val propFile = rootProject.file("keystore.properties")
+    if (propFile.exists()) {
+        propFile.inputStream().use { load(it) }
+    }
+}
+
 android {
     compileSdk = 37
+    signingConfigs {
+        if (keystoreProperties.containsKey("storeFile")) {
+            create("release") {
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+            }
+        }
+    }
     namespace = "io.zplayer.android"
     defaultConfig {
         manifestPlaceholders["usesCleartextTraffic"] = "false"
@@ -44,8 +63,11 @@ android {
             }
         }
         getByName("release") {
+            signingConfigs.findByName("release")?.let { signingConfig = it }
+            // Not shrunk: the Spotify libraries use reflection, and the first release should behave exactly like
+            // the debug build that was tested.
             optimization {
-               enable = true
+               enable = false
             }
             proguardFiles(
                 *fileTree(".") {

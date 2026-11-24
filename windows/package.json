@@ -11,8 +11,8 @@
     "theme:sync": "node scripts/design-preview.mjs --once"
   },
   "dependencies": {
-    "@zplayer/library": "0.1.0",
-    "@zplayer/theme": "0.1.0",
+    "@zplayer/library": "*",
+    "@zplayer/theme": "*",
     "@tauri-apps/api": "^2.9.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

@@ -8,7 +8,7 @@
   color: var(--text);
   transition: color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
 }
-.round:hover { color: var(--accent-text); }
+@media (hover: hover) { .round:hover { color: var(--accent-text); } }
 .round:active { transform: scale(.92); }
 .round.is-active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .round-sm { width: 40px; height: 40px; }
@@ -37,7 +37,7 @@
   transition: color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
 }
 .back-corner svg { width: 26px; height: 26px; }
-.back-corner:hover { border-color: var(--text); }
+@media (hover: hover) { .back-corner:hover { border-color: var(--text); } }
 .back-corner:active { transform: scale(.94); }
 .back-corner:focus-visible { outline-offset: -6px; }
 /* Space the first line of a page so it clears the corner button. */
@@ -63,7 +63,7 @@
   color: var(--text);
   transition: color var(--t-fast);
 }
-.action:hover { color: var(--accent-text); }
+@media (hover: hover) { .action:hover { color: var(--accent-text); } }
 .action:active .round { transform: scale(.92); }
 .action.is-active .round { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .actions { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
@@ -79,8 +79,8 @@
   color: var(--text-2);
   transition: color var(--t-fast), background-color var(--t-fast);
 }
-.window-controls button:hover { color: var(--text); background: var(--surface-2); }
-.window-controls .is-close:hover { color: #fff; background: #e81123; }
+@media (hover: hover) { .window-controls button:hover { color: var(--text); background: var(--surface-2); } }
+@media (hover: hover) { .window-controls .is-close:hover { color: #fff; background: #e81123; } }
 .window-controls svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1; }
 /* keep top-right content (clock, follow, mode label) clear of the buttons */
 :root[data-frameless] { --window-controls-w: 138px; }

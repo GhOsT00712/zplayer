@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { BackIcon } from './Icons';
 import './controls.css';
 
@@ -20,8 +20,22 @@ export function BackButton({ onClick, label = 'back', variant }: {
   /** "now": the playing window's bigger ring, cut off by the top edge. */
   variant?: 'now';
 }) {
-  return <button type="button" className={`back-corner${variant === 'now' ? ' back-now' : ''}`} aria-label={label} title={label}
-    onClick={onClick} data-no-swipe><BackIcon /></button>;
+  const [pressed, setPressed] = useState(false);
+  const timer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const reduced = () => document.documentElement.dataset.motion === 'reduced'
+    || (document.documentElement.dataset.motion !== 'full' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  // Hold the pressed look for a moment before leaving, so the tap is seen even though the page changes.
+  const click = () => {
+    if (reduced()) return onClick();
+    setPressed(true);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => { setPressed(false); onClick(); }, 140);
+  };
+  return <button type="button" className={`back-corner${variant === 'now' ? ' back-now' : ''}${pressed ? ' is-pressed' : ''}`}
+    aria-label={label} title={label} onPointerDown={() => setPressed(true)}
+    onPointerCancel={() => setPressed(false)} onPointerLeave={() => setPressed(false)}
+    onClick={click} data-no-swipe><BackIcon /></button>;
 }
 
 /**

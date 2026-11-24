@@ -112,7 +112,7 @@
   background: linear-gradient(to right, var(--mosaic-accent) calc(var(--p) * 100%), var(--track) calc(var(--p) * 100%));
 }
 .mosaic-controls { display: flex; gap: var(--s1); margin-top: 12px; }
-.mosaic .round:hover, .mosaic .back-corner:hover { color: var(--mosaic-accent); }
+@media (hover: hover) { .mosaic .round:hover, .mosaic .back-corner:hover { color: var(--mosaic-accent); } }
 
 /* reduced motion: no entrance sweep, no flips (the component also stops swapping covers) */
 :root[data-motion="reduced"] .mosaic-tile { animation: none !important; }

@@ -49,7 +49,7 @@
   color: var(--text-3);
   transition: color var(--t-fast);
 }
-.pivot-header:hover { color: var(--text-2); }
+@media (hover: hover) { .pivot-header:hover { color: var(--text-2); } }
 .pivot-header[aria-selected="true"] { color: var(--text); }
 
 .pivot-viewport { flex: 1; min-height: 0; position: relative; overflow: hidden; }

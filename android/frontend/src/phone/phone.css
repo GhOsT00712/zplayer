@@ -41,10 +41,10 @@ button, [role="button"], a, img, svg { -webkit-user-select: none; user-select: n
   }
 
   /* Keep the whole back ring visible and reserve its space above page content. */
-  :root { --back-size: 76px; --back-top: 8px; --back-left: 12px; }
+  :root { --back-size: 52px; --back-top: 8px; --back-left: 12px; }
   .back-corner { --size: var(--back-size); top: calc(var(--inset-top) + var(--back-top)); left: var(--back-left); }
-  .back-corner svg { width: 40px; height: 40px; stroke-width: 3.4; }   /* a big, bold arrow (the theme draws it at 2.4); the ring border is the theme's */
-  .back-corner:focus-visible { outline-offset: -12px; }
+  .back-corner svg { width: 28px; height: 28px; stroke-width: 3; }   /* a bold arrow (the theme draws it at 2.4); the ring border is the theme's */
+  .back-corner:focus-visible { outline-offset: -8px; }
   .clear-back { margin-left: calc(var(--back-left) + var(--back-size) + 16px - var(--gutter)); }
   :is(.hub-bar, .page-bar, .text-page-bar).clear-back { min-height: calc(var(--back-size) + 2 * var(--back-top)); }
 

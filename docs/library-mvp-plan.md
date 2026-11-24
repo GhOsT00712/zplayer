@@ -1,6 +1,6 @@
 # Library MVP plan (Windows and Android)
 
-Status: **MVP built; first release v0.1.0 published (24 Nov 2026).** Last updated 24 Nov 2026.
+Status: **MVP built; v0.1.0 published, v0.2.0 (button motion) prepared as a draft (24 Nov 2026).** Last updated 24 Nov 2026.
 Other Claude threads: read this block first, update the table when a milestone changes, and keep it short.
 
 ## Where things are
@@ -29,6 +29,8 @@ Other Claude threads: read this block first, update the table when a milestone c
 | 5 | Android UX | Done, installed on the Pixel | Typecheck, builds, browser preview with sample data | App Remote path only on the owner's phone |
 | 6 | Polish: states, refresh library, large library | Done | 6,000-song test, preview states | none |
 | R1 | Release v0.1.0 (Windows installer + signed Android APK) | Done, published: <https://github.com/GhOsT00712/zplayer/releases/tag/v0.1.0> | APK signature and fingerprint checked; Windows installer built; checksums attached | The release APK and installer have not been run by anyone yet; the owner's phone still has the debug build |
+| M1 | Button motion: back-button press, one press feel for all buttons, 52 px Android back ring (`button-motion-plan.md`) | Done | Typecheck; browser preview computed styles; press seen on the Pixel 6a | Quick taps on other buttons, hardware back and reduced motion not checked on a device; Windows window not driven |
+| R2 | Release v0.2.0 | Draft release, not published | See release notes | Owner to review and publish |
 
 ### Changes made after the first build (from the owner's feedback)
 
@@ -50,7 +52,7 @@ Other Claude threads: read this block first, update the table when a milestone c
    Suspects: the first big library sync rate-limiting playback; App Remote not connected yet when the first
    tap lands.
 2. Cross-device album art: the live look-up is a safety net, not a confirmed fix.
-3. Phone screens other than now playing still use the larger 76 px back ring.
+3. (Closed: the phone back ring is now 52 px everywhere, see button-motion-plan.md.)
 4. Deep list reads use cursor offsets; switch to key-range paging if slow on a device.
 
 ## Verification summary

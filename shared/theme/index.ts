@@ -10,3 +10,4 @@ export { DetailPage, PageBackground, Route, Shell, usePageBackground } from './P
 export { DataView, HomeScreen, SearchBox, Section, TextPage, TileStrip, TopMenu, Wordmark, type DataState, type HomeSection, type HomeTile, type MenuEntry } from './Screens';
 export { ThemeSwitch, accents, type Accent, type ThemeMode } from './ThemeSwitch';
 export * from './Icons';
+import './press.css'; // last, so the press rules win over per-component :active

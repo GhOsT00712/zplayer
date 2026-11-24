@@ -1,0 +1,30 @@
+/* One press feel for every button: dip fast on press (--t-press), spring back slowly (--t-release).
+   Loaded last so it wins over the per-component :active rules. Hover colours are guarded elsewhere
+   with (hover: hover) so a touch tap never leaves a button accent-coloured. */
+:is(.round, .home-back, .ts-dot, .swatch, .row-heart, .tile, .qp-tile, .strip-tile, .pn-art, .next-row, .mini-open,
+    .pivot-header, .home-nav-item, .strip-more, button.now-title, .page-sub button, .text-link, .ts-modes button,
+    .choice, .review-chips button, .review-back, .pn-artist, .row, .back-corner, .action .round, .window-controls button) {
+  transition-property: color, background-color, border-color, opacity, transform;
+  transition-duration: var(--t-release);
+  transition-timing-function: var(--ease);
+}
+:is(.round, .home-back, .ts-dot, .swatch, .row-heart, .tile, .qp-tile, .strip-tile, .pn-art, .next-row, .mini-open,
+    .pivot-header, .home-nav-item, .strip-more, button.now-title, .page-sub button, .text-link, .ts-modes button,
+    .choice, .review-chips button, .review-back, .pn-artist, .row, .back-corner, .window-controls button):active:not(:disabled),
+.back-corner.is-pressed, .action:active .round {
+  transition-duration: var(--t-press);
+}
+:is(.round, .home-back, .ts-dot, .swatch, .row-heart):active:not(:disabled), .action:active .round { transform: scale(.9); }
+:is(.tile, .qp-tile, .strip-tile, .pn-art, .next-row, .mini-open):active:not(:disabled) { transform: scale(.97); }
+:is(.pivot-header, .home-nav-item, .strip-more, button.now-title, .page-sub button, .text-link, .ts-modes button,
+    .choice, .review-chips button, .review-back, .pn-artist):active:not(:disabled) {
+  opacity: .6;
+  transform: scale(.98);
+  transform-origin: left center;
+}
+.row:active:not(:disabled) { transform: translateX(4px); }
+.window-controls button:active { background: var(--surface-2); transform: none; }
+
+/* back button: shrinks and the arrow turns the theme colour while pressed */
+.back-corner:active, .back-corner.is-pressed { transform: scale(.86); color: var(--accent-text); }
+.mosaic .back-corner:active, .mosaic .back-corner.is-pressed { color: var(--mosaic-accent); }

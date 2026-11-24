@@ -32,7 +32,7 @@
 }
 .page-sub { font: var(--w-light) 26px/1.2 var(--font); color: var(--text-2); }
 .page-sub button { transition: color var(--t-fast); }
-.page-sub button:hover { color: var(--accent-text); }
+@media (hover: hover) { .page-sub button:hover { color: var(--accent-text); } }
 .page-actions { margin-top: var(--s2); }
 .page-body { max-width: 980px; }
 

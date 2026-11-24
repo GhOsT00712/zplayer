@@ -5,9 +5,9 @@
   color: var(--text-2);
   transition: color var(--t-fast);
 }
-.ts-modes button:hover { color: var(--text); }
+@media (hover: hover) { .ts-modes button:hover { color: var(--text); } }
 .ts-modes button[aria-pressed="true"] { color: var(--text); }
 .ts-accents { display: flex; gap: 6px; }
 .ts-dot { width: 16px; height: 16px; background: var(--dot); transition: transform var(--t-fast); }
-.ts-dot:hover { transform: scale(1.15); }
+@media (hover: hover) { .ts-dot:hover { transform: scale(1.15); } }
 .ts-dot[aria-pressed="true"] { outline: 2px solid var(--text); outline-offset: 2px; }

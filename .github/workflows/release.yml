@@ -3,7 +3,12 @@
 #
 #   git tag v0.3.0 && git push origin v0.3.0
 #
-# Needs four repository secrets for the Android signing key (see docs/releasing.md).
+# Before the first run, add four repository secrets for the Android signing key (PowerShell):
+#   [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\.zplayer\zplayer-release.jks")) | gh secret set ANDROID_KEYSTORE_BASE64
+#   gh secret set ANDROID_KEYSTORE_PASSWORD
+#   gh secret set ANDROID_KEY_ALIAS
+#   gh secret set ANDROID_KEY_PASSWORD
+# The tag must match the app version (tauri.conf.json). The APK's certificate SHA-1 is printed in the log.
 name: release
 
 on:
